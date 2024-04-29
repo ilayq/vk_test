@@ -4,20 +4,29 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5432:5432"
+    networks:
+      - app-network
 
   backend:
-    build: .
-    ports:
-      - "80:80"
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - DB_HOST=${HOST}
+      - DB_HOST=postgres
       - DB_NAME=${DB_NAME}
       - SECRET_KEY=${SECRET_KEY}
       - ADMIN_LOGIN=${ADMIN_LOGIN}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    build: .
+    command: sh -c "alembic upgrade head && python3 main.py"
+    ports:
+      - "8000:8000"
+    restart: on-failure
     depends_on:
       - postgres
+    networks:
+      - app-network
+networks:
+  app-network:
