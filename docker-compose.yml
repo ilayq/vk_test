@@ -6,7 +6,8 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - HOST=${HOST}
+      - DB_HOST=${HOST}
+      - DB_NAME=${DB_NAME}
     depends_on:
       - postgres
 
