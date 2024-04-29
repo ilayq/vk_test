@@ -42,4 +42,4 @@ async def release_lock(id: UUID) -> Response:
 
 
 if __name__ == '__main__':
-    uvicorn.run('main:app', reload=True)
+    uvicorn.run('main:app', host='0.0.0.0', port=8000)
