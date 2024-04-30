@@ -19,5 +19,5 @@ class UserORM(Base):
     password = Column(String, nullable=False)
     project_id = Column(UUID(as_uuid=True), default=uuid4, nullable=False)
     env = Column(ENUM(Env, name='env_enum', create_type=False), nullable=False)
-    domain =  Column(ENUM(Domain, name='domain_enum', create_type=False), nullable=False)
+    domain = Column(ENUM(Domain, name='domain_enum', create_type=False), nullable=False)
     locktime = Column(TIMESTAMP, default=None)

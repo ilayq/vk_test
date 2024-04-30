@@ -32,15 +32,15 @@ async def create_user(user: UserRegisterDTO, is_logged: Annotated[bool, Depends(
 
 
 @app.get('/acquire_lock')
-async def acquire_lock(id: UUID, is_logged: Annotated[bool, Depends(check_auth_token)]) -> Response:
-    if await handlers.acquire_lock(id):
+async def acquire_lock(user_id: UUID, is_logged: Annotated[bool, Depends(check_auth_token)]) -> Response:
+    if await handlers.acquire_lock(user_id):
         return Response(status_code=200)
     raise HTTPException(status_code=409, detail="User is locked or not exists")
 
 
 @app.get('/release_lock')
-async def release_lock(id: UUID, is_logged: Annotated[bool, Depends(check_auth_token)]) -> Response:
-    if await handlers.release_lock(id):
+async def release_lock(user_id: UUID, is_logged: Annotated[bool, Depends(check_auth_token)]) -> Response:
+    if await handlers.release_lock(user_id):
         return Response(status_code=200)
     raise HTTPException(detail="User doesn`t exist", status_code=409)
 

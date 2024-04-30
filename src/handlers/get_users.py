@@ -1,13 +1,13 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from src.ORM import session
+from src.ORM import session_maker
 from src.UserORM import UserORM
 from src.UserDTO import UserDTO
 from src.security import decode_password
 
 
-async def get_users(session: Session = session) -> list[UserDTO]:
+async def get_users(session: async_sessionmaker = session_maker) -> list[UserDTO]:
     result = []
     query = select(UserORM)
     async with session.begin() as s:
