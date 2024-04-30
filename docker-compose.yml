@@ -23,6 +23,12 @@ services:
     command: sh -c "alembic upgrade head && python3 main.py"
     ports:
       - "8000:8000"
+    healthcheck:
+      test: ["curl", "http://localhost:8000/healthcheck"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     restart: on-failure
     depends_on:
       - postgres
