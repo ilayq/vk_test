@@ -11,8 +11,9 @@ async def create_user(user: UserRegisterDTO, session: Session = session) -> None
     try:
         async with session.begin() as s:
             user = UserORM(**user.model_dump())
-            user.password = encode_password(user.password)
+            user.password = await encode_password(user.password)
             s.add(user)
         return True
-    except SQLAlchemyError:
+    except SQLAlchemyError as e:
+        print(e)
         return False

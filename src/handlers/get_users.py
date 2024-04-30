@@ -14,7 +14,7 @@ async def get_users(session: Session = session) -> list[UserDTO]:
         query_result = await s.execute(query)
         for user in query_result.scalars():
             userdto = UserDTO.model_validate(user, strict=True, from_attributes=True)
-            userdto.password = decode_password(userdto.password)
-            result.append()
+            userdto.password = await decode_password(userdto.password)
+            result.append(userdto)
 
     return result
