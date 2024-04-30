@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends
 
-from .security_config import ADMIN_LOGIN, ADMIN_PASSWORD, SECRET_KEY, f
+from .security_config import ADMIN_LOGIN, ADMIN_PASSWORD, f
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="admin/login")

@@ -9,10 +9,12 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ADMIN_LOGIN = os.getenv("ADMIN_LOGIN")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
+
 def get_key(password: str) -> bytes:
     digest = hashes.Hash(hashes.SHA256(), backend=default_backend())
     digest.update(password.encode())
     return base64.urlsafe_b64encode(digest.finalize())
+
 
 SECRET_KEY = get_key(SECRET_KEY)
 
