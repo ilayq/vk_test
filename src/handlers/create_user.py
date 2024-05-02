@@ -7,12 +7,13 @@ from src.ORM import session_maker
 from src.security import encode_password
 
 
-async def create_user(user: UserRegisterDTO, session: async_sessionmaker = session_maker) -> bool:
+async def create_user(user: UserRegisterDTO, sm: async_sessionmaker = session_maker) -> bool:
     try:
-        async with session.begin() as s:
-            user = UserORM(**user.model_dump())
-            user.password = await encode_password(user.password)
-            s.add(user)
+        async with sm() as session:
+            async with session.begin():
+                user = UserORM(**user.model_dump())
+                user.password = await encode_password(user.password)
+                session.add(user)
         return True
     except SQLAlchemyError:
         return False

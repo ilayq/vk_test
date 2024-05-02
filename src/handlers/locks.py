@@ -9,9 +9,9 @@ from src.UserORM import UserORM
 from src.ORM import session_maker
 
 
-async def _update_locktime(user_id: UUID, value: datetime | None = datetime.now(), session: async_sessionmaker = session_maker) -> bool:
+async def _update_locktime(user_id: UUID, value: datetime | None, sm: async_sessionmaker = session_maker) -> bool:
     try:
-        async with session() as s:
+        async with sm() as s:
             query = (
                 update(UserORM).
                 where(UserORM.id == user_id).
@@ -24,9 +24,9 @@ async def _update_locktime(user_id: UUID, value: datetime | None = datetime.now(
         return False
 
 
-async def acquire_lock(user_id: UUID, session: async_sessionmaker = session_maker) -> bool:
+async def acquire_lock(user_id: UUID, sm: async_sessionmaker = session_maker) -> bool:
     query = select(UserORM).where(UserORM.id == user_id)
-    async with session() as s:
+    async with sm() as s:
         query_result = await s.execute(query)
         user_locked_or_not_exists = True
         for user in query_result.scalars():
@@ -35,17 +35,17 @@ async def acquire_lock(user_id: UUID, session: async_sessionmaker = session_make
         if user_locked_or_not_exists:
             return False
         else:
-            return await _update_locktime(user_id)
+            return await _update_locktime(user_id, datetime.now(), sm)
 
 
-async def release_lock(user_id: UUID, session: async_sessionmaker = session_maker) -> bool:
+async def release_lock(user_id: UUID, sm: async_sessionmaker = session_maker) -> bool:
     query = select(UserORM).where(UserORM.id == user_id)
-    async with session() as s:
+    async with sm() as s:
         query_result = await s.execute(query)
         user_exists = False
         for _ in query_result.scalars():
             user_exists = True
         if user_exists:
-            return await _update_locktime(user_id, None)
+            return await _update_locktime(user_id, None, sm)
         else:
             return False
