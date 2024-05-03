@@ -1,18 +1,18 @@
 """init
 
-Revision ID: f740ce566bc2
+Revision ID: ea3b3f2daa75
 Revises: 
-Create Date: 2024-04-28 22:55:21.960513
+Create Date: 2024-05-03 20:31:04.991840
 
 """
 from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import postgresql
+
 
 # revision identifiers, used by Alembic.
-revision: str = 'f740ce566bc2'
+revision: str = 'ea3b3f2daa75'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,8 +26,8 @@ def upgrade() -> None:
     sa.Column('login', sa.String(), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
     sa.Column('project_id', sa.UUID(), nullable=False),
-    sa.Column('env', postgresql.ENUM('PROD', 'PREPROD', 'STAGE', name='env_enum'), nullable=False),
-    sa.Column('domain', postgresql.ENUM('CANARY', 'REGULAR', name='domain_enum'), nullable=False),
+    sa.Column('env', sa.String(), nullable=False),
+    sa.Column('domain', sa.String(), nullable=False),
     sa.Column('locktime', sa.TIMESTAMP(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('login')

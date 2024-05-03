@@ -1,11 +1,11 @@
 import pytest
 from src.handlers import create_user, get_users
-from tests.env import Create_DB, compare_users
+from tests.env import CreateDB, compare_users
 
 
 @pytest.mark.asyncio
 async def test_create_unique_user():
-    mock_db = Create_DB('test_create_user')
+    mock_db = CreateDB('test_create_user')
     async with mock_db:
         mock_user, session_maker = mock_db.mock_user, mock_db.session_maker
         await create_user(mock_user, session_maker)

@@ -1,12 +1,12 @@
 import pytest
 
 from src.handlers import create_user, get_users
-from tests.env import Create_DB, UserRegisterDTO, Env, Domain, compare_users
+from tests.env import CreateDB, UserRegisterDTO, Env, Domain, compare_users
 
 
 @pytest.mark.asyncio
 async def test_get_users():
-    mock_db = Create_DB('test_get_users')
+    mock_db = CreateDB('test_get_users')
     users = [
         UserRegisterDTO(
             login='user1',

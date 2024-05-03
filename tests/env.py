@@ -1,5 +1,3 @@
-from sqlalchemy import Column
-from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 import asyncpg
 
@@ -9,14 +7,7 @@ from src.ORM import db_user, db_user_password, host
 from src.UserDTO import UserRegisterDTO
 
 
-class ENUMSORM(Base): # adding enum type in db
-    __tablename__ = 'tmptable'
-    env = Column(ENUM(Env, name='env_enum', create_type=True), nullable=False, primary_key=True)
-    domain = Column(ENUM(Domain, name='domain_enum', create_type=True), nullable=False)
-
-
-class Create_DB:
-
+class CreateDB:
     def __init__(self, db_name: str):
         self.db_name = db_name
         self.con_string = f"postgresql+asyncpg://{db_user}:{db_user_password}@{host}/{db_name}"
@@ -45,7 +36,7 @@ class Create_DB:
             await db.run_sync(Base.metadata.create_all)
         return self
     
-    async def __aexit__(self, type, value, traceback):
+    async def __aexit__(self, exc_type, exc_value, traceback):
         await self.con.execute(f"select pg_terminate_backend(pid) from pg_stat_activity where datname='{self.db_name}'")
         await self.con.execute(f"DROP DATABASE {self.db_name}")
         await self.con.close()

@@ -12,8 +12,11 @@ async def create_user(user: UserRegisterDTO, sm: async_sessionmaker = session_ma
         async with sm() as session:
             async with session.begin():
                 user = UserORM(**user.model_dump())
+                user.env = user.env.value
+                user.domain = user.domain.value
                 user.password = await encode_password(user.password)
                 session.add(user)
         return True
-    except SQLAlchemyError:
+    except SQLAlchemyError as e:
+        print(e)
         return False
